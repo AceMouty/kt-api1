@@ -1,0 +1,29 @@
+### Get All Users
+GET http://localhost:8080/api/users
+Content-Type: application/json
+
+### Create new user
+POST http://localhost:8080/api/users/createUser
+Content-Type: application/json
+
+{
+  "name": "Awesome Test User 2",
+  "bio": "Amazing Bio 2"
+}
+
+### Get User By Id
+GET http://localhost:8080/api/users/2
+Content-Type: application/json
+
+### Update User by Id
+PUT http://localhost:8080/api/users/2
+Content-Type: application/json
+
+{
+ "name": "Updated Test 2",
+  "bio": "Updated Test Bio 2"
+}
+
+### Delete User By Id
+DELETE http://localhost:8080/api/users/3
+Content-Type: application/json
