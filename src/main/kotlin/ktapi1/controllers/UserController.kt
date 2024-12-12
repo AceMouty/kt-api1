@@ -47,26 +47,23 @@ class UserController(val userService: UserService) {
     @PutMapping("/{userId}")
     fun updateUserById(@PathVariable userId: Long, @RequestBody userChanges: UserDto): ResponseEntity<UserResponse>
     {
-        val userExists= userService.existsById(userId)
-        if(!userExists) {
+        val userModel = UserModel(id = userId, name = userChanges.name, bio = userChanges.bio)
+        val updatedUser = userService.update(userModel)
+        if(updatedUser == null) {
             return userNotFoundResponse()
         }
 
-        val userModel = UserModel(id = userId, name = userChanges.name, bio = userChanges.bio)
-        val updatedUser = userService.update(userModel)
         val userDto = UserDto(name = updatedUser.name, bio = updatedUser.bio)
-
         return ResponseEntity.status(200).body(UserResponse( user = userDto, message = ""))
     }
 
     @DeleteMapping("/{userId}")
     fun deleteUserById(@PathVariable userId: Long): ResponseEntity<UserResponse>{
-        val userExists= userService.existsById(userId)
-        if(!userExists) {
+        val deletedUser = userService.delete(userId)
+        if(deletedUser == null) {
             return userNotFoundResponse()
         }
-
-        val deletedUser = userService.delete(userId)
+        
         val userDto = UserDto(name = deletedUser.name, bio = deletedUser.bio)
         return ResponseEntity.status(202).body(UserResponse(user = userDto, message = ""))
     }
@@ -77,6 +74,5 @@ class UserController(val userService: UserService) {
 }
 
 data class CreateUserRequest(val name: String, val bio: String)
-
 data class UserResponse(val user: UserDto?, val message: String)
 data class UserDto (val name: String = "", val bio: String = "")
